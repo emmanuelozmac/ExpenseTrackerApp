@@ -4,12 +4,22 @@ class MyTextfield extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final String? labelText;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final IconData? prefixIcon;
+  final Iterable<String>? autofillHints;
 
   const MyTextfield({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    this.labelText,
+    this.keyboardType,
+    this.textInputAction,
+    this.prefixIcon,
+    this.autofillHints,
   });
 
   @override
@@ -19,16 +29,24 @@ class MyTextfield extends StatelessWidget {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        autofillHints: autofillHints,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: const Color(0xFFF6F7F9),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: const Color.fromARGB(255, 0, 0, 0)),
-            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.black.withOpacity(0.1)),
+            borderRadius: BorderRadius.circular(12),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: const Color.fromARGB(255, 0, 0, 0)),
+            borderSide: const BorderSide(color: Color(0xFF1B3A57)),
+            borderRadius: BorderRadius.circular(12),
           ),
+          prefixIcon: prefixIcon == null ? null : Icon(prefixIcon),
+          labelText: labelText,
           hintText: hintText,
-          hintStyle: TextStyle(color: const Color.fromARGB(255, 57, 57, 57)),
+          hintStyle: TextStyle(color: Colors.grey.shade600),
         ),
       ),
     );

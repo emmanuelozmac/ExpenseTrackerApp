@@ -4,6 +4,7 @@ import 'package:expense_tracker/database/expense_database.dart';
 import 'package:expense_tracker/firebase_options.dart';
 import 'package:expense_tracker/pages/aboutus_page.dart';
 import 'package:expense_tracker/pages/home_page.dart';
+import 'package:expense_tracker/utilities/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: AppTheme.light(),
       home: const AuthGate(),
       routes: {
         '/loginPage': (context) => const LoginOrRegister(),

@@ -41,92 +41,98 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.white),
       backgroundColor: Colors.white,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 120),
-          child: Column(
-            children: [
-              //logo
-              Icon(
-                Icons.lock_open_rounded,
-                size: 80,
-                color: const Color.fromARGB(255, 40, 40, 220),
-              ),
-
-              const SizedBox(height: 15),
-              //message, app logo
-              Text(
-                'Welcome Back',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-
-              // const SizedBox(height: 15),
-
-              /* Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Text(
-                  'Login to your account',
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 32, 20, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 12),
+                const Text(
+                  "Welcome back",
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),*/
-              const SizedBox(height: 25),
+                const SizedBox(height: 6),
+                Text(
+                  "Sign in to continue tracking your expenses.",
+                  style: TextStyle(color: Colors.grey.shade600),
+                ),
 
-              //email textfield
-              MyTextfield(
-                controller: emailController,
-                hintText: 'Email',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 15),
-
-              //password textfild
-              MyTextfield(
-                controller: passwordController,
-                hintText: 'Password',
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 20),
-
-              //sign in
-              MyButton2(text: 'Sign In', onTap: login),
-
-              const SizedBox(height: 10),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Not Registered?",
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 23, 23, 23),
-                    ),
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8F9FB),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.black.withOpacity(0.05)),
                   ),
-                  const SizedBox(width: 5),
-                  GestureDetector(
-                    onTap: widget.onTap,
-                    child: Text(
-                      "Register",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                  child: Column(
+                    children: [
+                      //email textfield
+                      MyTextfield(
+                        controller: emailController,
+                        hintText: 'you@email.com',
+                        labelText: 'Email',
+                        obscureText: false,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: Icons.mail_outline,
+                        autofillHints: const [AutofillHints.email],
                       ),
-                    ),
+
+                      const SizedBox(height: 14),
+
+                      //password textfield
+                      MyTextfield(
+                        controller: passwordController,
+                        hintText: '••••••••',
+                        labelText: 'Password',
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        prefixIcon: Icons.lock_outline,
+                        autofillHints: const [AutofillHints.password],
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      //sign in
+                      MyButton2(text: 'Sign In', onTap: login),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Not registered?",
+                        style: TextStyle(color: Colors.grey.shade700),
+                      ),
+                      const SizedBox(width: 6),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: const Text(
+                          "Create account",
+                          style: TextStyle(
+                            color: Color(0xFF1B3A57),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

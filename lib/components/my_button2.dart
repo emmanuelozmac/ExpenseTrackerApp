@@ -8,16 +8,28 @@ class MyButton2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        margin: const EdgeInsets.symmetric(horizontal: 25),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 40, 40, 220),
-          borderRadius: BorderRadius.circular(18),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: SizedBox(
+        width: double.infinity,
+        height: 52,
+        child: ElevatedButton(
+          onPressed: onTap,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF1B3A57),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            elevation: 0,
+          ),
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
-        child: Center(child: Text(text, style: TextStyle(color: Colors.white))),
       ),
     );
   }

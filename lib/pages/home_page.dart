@@ -34,6 +34,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    nameController.dispose();
+    amountController.dispose();
+    super.dispose();
+  }
+
   // refresh graph data
   void refreshData() {
     _monthlyTotalsFuture =
@@ -45,24 +52,40 @@ class _HomePageState extends State<HomePage> {
 
   // open new expense box
   void openNewExpenseBox() {
+    nameController.clear();
+    amountController.clear();
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text("New Expense"),
+            title: const Text("New Expense"),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 //user input -> expense name
                 TextField(
                   controller: nameController,
-                  decoration: const InputDecoration(hintText: "Name"),
+                  textCapitalization: TextCapitalization.words,
+                  decoration: const InputDecoration(
+                    labelText: "Name",
+                    hintText: "Groceries, Uber, Rent",
+                  ),
+                  textInputAction: TextInputAction.next,
                 ),
 
                 //user input user amount
                 TextField(
                   controller: amountController,
-                  decoration: const InputDecoration(hintText: "Amount"),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: "Amount",
+                    hintText: "0.00",
+                  ),
                 ),
               ],
             ),
@@ -82,25 +105,35 @@ class _HomePageState extends State<HomePage> {
     //pre filled existing values into textibles
     String existingName = expense.name;
     String existingAmount = expense.amount.toString();
+    nameController.text = existingName;
+    amountController.text = existingAmount;
 
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
             title: const Text("Edit Expense"),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 //user input -> expense name
                 TextField(
                   controller: nameController,
-                  decoration: InputDecoration(hintText: existingName),
+                  textCapitalization: TextCapitalization.words,
+                  decoration: const InputDecoration(labelText: "Name"),
+                  textInputAction: TextInputAction.next,
                 ),
 
                 //user input user amount
                 TextField(
                   controller: amountController,
-                  decoration: InputDecoration(hintText: existingAmount),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  decoration: const InputDecoration(labelText: "Amount"),
                 ),
               ],
             ),
@@ -122,6 +155,13 @@ class _HomePageState extends State<HomePage> {
       builder:
           (context) => AlertDialog(
             title: const Text("Delete Expense?"),
+            content: Text(
+              'Delete "${expense.name}" from your expenses?',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             actions: [
               // cancel button
               _cancelButton(),
@@ -180,134 +220,280 @@ class _HomePageState extends State<HomePage> {
           (sum, expense) => sum + expense.amount,
         );
 
+        final monthLabel =
+            '${getCurrentMonthName(displayMonth)} $displayYear';
+
         // return UI
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('\$${selectedMonthTotal.toStringAsFixed(2)}'),
-                Text('${getCurrentMonthName(displayMonth)} $displayYear'),
-              ],
+            elevation: 0,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            title: const Text(
+              "Overview",
+              style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
           drawer: Drawer(
             backgroundColor: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.only(top: 160.0, left: 8),
-              child: Column(
+            child: SafeArea(
+              child: ListView(
+                padding: EdgeInsets.zero,
                 children: [
-                  //its common to place a drawer header here
-
-                  // home page title
+                  DrawerHeader(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFF2F5F9),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Color(0xFF1B3A57),
+                          child: Icon(Icons.wallet, color: Colors.white),
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          "Expense Tracker",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          "Track spending with clarity",
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                      ],
+                    ),
+                  ),
                   ListTile(
-                    leading: Icon(Icons.home),
-                    title: Text('Home'),
+                    leading: const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Color(0xFF1B3A57),
+                      child: Icon(Icons.home, color: Colors.white, size: 18),
+                    ),
+                    title: const Text(
+                      'Home',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () {
-                      //pop the drawer
                       Navigator.pop(context);
-                      //go to home page
                       Navigator.pushNamed(context, '/homepage');
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.contact_phone_rounded),
-                    title: Text('About Us'),
+                    leading: const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Color(0xFFE38B37),
+                      child: Icon(
+                        Icons.contact_phone_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                    title: const Text(
+                      'About Us',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
                     onTap: () {
-                      //pop the drawer
                       Navigator.pop(context);
-                      //go to home page
                       Navigator.pushNamed(context, '/aboutus');
                     },
                   ),
-                  const Spacer(),
+                  const Divider(height: 32),
                   ListTile(
-                    leading: Icon(Icons.logout),
-                    title: Text('Logout'),
+                    leading: const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Color(0xFFD95555),
+                      child: Icon(Icons.logout, color: Colors.white, size: 18),
+                    ),
+                    title: const Text(
+                      'Logout',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
                     onTap: () {
                       logout();
-                      //pop the drawer
                       Navigator.pop(context);
                     },
                   ),
-                  const SizedBox(height: 25),
                 ],
               ),
             ),
           ),
 
           backgroundColor: Colors.white,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: const Color.fromARGB(255, 40, 40, 220),
+          floatingActionButton: FloatingActionButton.extended(
+            backgroundColor: const Color(0xFF1B3A57),
             onPressed: openNewExpenseBox,
-            child: const Icon(Icons.add, color: Colors.white),
+            label: const Text(
+              "Add Expense",
+              style: TextStyle(color: Colors.white),
+            ),
+            icon: const Icon(Icons.add, color: Colors.white),
           ),
           body: SafeArea(
             child: Column(
               children: [
-                //gRAPH UI
-                SizedBox(
-                  height: 250,
-                  child: FutureBuilder(
-                    future: _monthlyTotalsFuture,
-                    builder: (context, snapshot) {
-                      //data is loaded
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        Map<String, double> monthlyTotals = snapshot.data ?? {};
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF2F5F9),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  monthLabel,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  formatAmount(selectedMonthTotal),
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Transactions",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  "${displayedExpenses.length}",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Spending Trend",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 240,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.black.withOpacity(0.06),
+                          ),
+                        ),
+                        child: Center(
+                          child: FutureBuilder(
+                            future: _monthlyTotalsFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                Map<String, double> monthlyTotals =
+                                    snapshot.data ?? {};
 
-                        //create the list of monthly summary
-                        List<double>
-                        monthlySummary = List.generate(monthCount, (index) {
-                          // callculate tht year and the month
-                          int year = startYear + (startMonth + index - 1) ~/ 12;
-                          int month = (startMonth + index - 1) % 12 + 1;
-
-                          // create the key in the format 'year month'
-                          String yearMonthKey = '$year-$month';
-
-                          //return the total for year-month or 0.0 if non-existent
-                          return monthlyTotals[yearMonthKey] ?? 0.0;
-                        });
-                        return MyBarGraph(
-                          monthlySummary: monthlySummary,
-                          startMonth: startMonth,
-                          onBarTapped: _handleBarTapped,
-                        );
-                      }
-                      //loading
-                      else {
-                        return const Center(child: Text('Loading..'));
-                      }
-                    },
+                                List<double> monthlySummary = List.generate(
+                                  monthCount,
+                                  (index) {
+                                    int year =
+                                        startYear +
+                                        (startMonth + index - 1) ~/ 12;
+                                    int month =
+                                        (startMonth + index - 1) % 12 + 1;
+                                    String yearMonthKey = '$year-$month';
+                                    return monthlyTotals[yearMonthKey] ?? 0.0;
+                                  },
+                                );
+                                return MyBarGraph(
+                                  monthlySummary: monthlySummary,
+                                  startMonth: startMonth,
+                                  onBarTapped: _handleBarTapped,
+                                );
+                              } else {
+                                return const Center(child: Text('Loading..'));
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      const Text(
+                        "Transactions",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
                   ),
                 ),
 
-                const SizedBox(height: 25),
-
                 // expense list UI
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: displayedExpenses.length,
-                    itemBuilder: (context, index) {
-                      // reverse the index to show the latest item first
-                      int reversedIndex = displayedExpenses.length - 1 - index;
+                  child:
+                      displayedExpenses.isEmpty
+                          ? Center(
+                            child: Text(
+                              "No expenses yet for $monthLabel.",
+                              style: TextStyle(color: Colors.grey.shade600),
+                            ),
+                          )
+                          : ListView.builder(
+                            itemCount: displayedExpenses.length,
+                            itemBuilder: (context, index) {
+                              int reversedIndex =
+                                  displayedExpenses.length - 1 - index;
+                              Expense individualExpense =
+                                  displayedExpenses[reversedIndex];
 
-                      //get individual expense
-                      Expense individualExpense =
-                          displayedExpenses[reversedIndex];
-
-                      //return list title UI
-                      return MyListTile(
-                        tittle: individualExpense.name,
-                        trailing: formatAmount(individualExpense.amount),
-                        onEditPressed:
-                            (context) => openEditBox(individualExpense),
-                        onDeletePressed:
-                            (context) => openDeleteBox(individualExpense),
-                      );
-                    },
-                  ),
+                              return MyListTile(
+                                title: individualExpense.name,
+                                subtitle: formatShortDate(
+                                  individualExpense.date,
+                                ),
+                                trailing: formatAmount(
+                                  individualExpense.amount,
+                                ),
+                                onEditPressed:
+                                    (context) =>
+                                        openEditBox(individualExpense),
+                                onDeletePressed:
+                                    (context) =>
+                                        openDeleteBox(individualExpense),
+                              );
+                            },
+                          ),
                 ),
               ],
             ),

@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class MyListTile extends StatelessWidget {
-  final String tittle;
+  final String title;
   final String trailing;
+  final String? subtitle;
   final void Function(BuildContext)? onEditPressed;
   final void Function(BuildContext)? onDeletePressed;
 
   const MyListTile({
     super.key,
-    required this.tittle,
+    required this.title,
     required this.trailing,
+    this.subtitle,
     required this.onEditPressed,
     required this.onDeletePressed,
   });
@@ -44,10 +46,30 @@ class MyListTile extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(8),
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.black.withOpacity(0.05)),
           ),
-          child: ListTile(title: Text(tittle), trailing: Text(trailing)),
+          child: ListTile(
+            title: Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            subtitle:
+                subtitle == null
+                    ? null
+                    : Text(
+                      subtitle!,
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+            trailing: Text(
+              trailing,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1B3A57),
+              ),
+            ),
+          ),
         ),
       ),
     );

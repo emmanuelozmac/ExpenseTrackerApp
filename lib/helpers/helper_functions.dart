@@ -49,3 +49,9 @@ String getCurrentMonthName(int month) {
   int targetMonth = month;
   return months[targetMonth - 1];
 }
+
+// format date for list tiles (e.g., Jan 5, 2026)
+String formatShortDate(DateTime date) {
+  final format = DateFormat("MMM d, y");
+  return format.format(date);
+}
