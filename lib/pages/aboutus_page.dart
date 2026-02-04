@@ -37,7 +37,7 @@ class AboutusPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFF8F9FB),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.black.withOpacity(0.05)),
+                  border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

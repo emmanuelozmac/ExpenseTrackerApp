@@ -200,5 +200,5 @@ Widget getBottomTitles(double value, TitleMeta meta) {
       text = '';
       break;
   }
-  return SideTitleWidget(child: Text(text, style: textstyle), meta: meta);
+  return SideTitleWidget(meta: meta, child: Text(text, style: textstyle));
 }

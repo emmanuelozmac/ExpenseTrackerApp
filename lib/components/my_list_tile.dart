@@ -48,7 +48,7 @@ class MyListTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.grey.shade50,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.black.withOpacity(0.05)),
+            border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
           ),
           child: ListTile(
             title: Text(

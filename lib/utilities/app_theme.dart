@@ -4,7 +4,6 @@ class AppTheme {
   static ThemeData light() {
     const primary = Color(0xFF1B3A57);
     const surface = Color(0xFFFFFFFF);
-    const background = Color(0xFFF6F7F9);
 
     return ThemeData(
       useMaterial3: true,
@@ -12,7 +11,6 @@ class AppTheme {
         primary: primary,
         secondary: Color(0xFFE38B37),
         surface: surface,
-        background: background,
         onPrimary: Colors.white,
         onSurface: Color(0xFF1A1A1A),
       ),
