@@ -43,11 +43,10 @@ class _HomePageState extends State<HomePage> {
 
   // refresh graph data
   void refreshData() {
-    _monthlyTotalsFuture =
-        Provider.of<ExpenseDatabase>(
-          context,
-          listen: false,
-        ).calculateMonthlyTotals();
+    _monthlyTotalsFuture = Provider.of<ExpenseDatabase>(
+      context,
+      listen: false,
+    ).calculateMonthlyTotals();
   }
 
   // open new expense box
@@ -56,47 +55,45 @@ class _HomePageState extends State<HomePage> {
     amountController.clear();
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text("New Expense"),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+      builder: (context) => AlertDialog(
+        title: const Text("New Expense"),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            //user input -> expense name
+            TextField(
+              controller: nameController,
+              textCapitalization: TextCapitalization.words,
+              decoration: const InputDecoration(
+                labelText: "Name",
+                hintText: "Groceries, Uber, Rent",
+              ),
+              textInputAction: TextInputAction.next,
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                //user input -> expense name
-                TextField(
-                  controller: nameController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(
-                    labelText: "Name",
-                    hintText: "Groceries, Uber, Rent",
-                  ),
-                  textInputAction: TextInputAction.next,
-                ),
+            SizedBox(height: 14),
 
-                //user input user amount
-                TextField(
-                  controller: amountController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration: const InputDecoration(
-                    labelText: "Amount",
-                    hintText: "0.00",
-                  ),
-                ),
-              ],
+            //user input user amount
+            TextField(
+              controller: amountController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: const InputDecoration(
+                labelText: "Amount",
+                hintText: "0.00",
+              ),
             ),
-            actions: [
-              // cancel button
-              _cancelButton(),
+          ],
+        ),
+        actions: [
+          // cancel button
+          _cancelButton(),
 
-              //save button
-              _createNewExpenseButton(),
-            ],
-          ),
+          //save button
+          _createNewExpenseButton(),
+        ],
+      ),
     );
   }
 
@@ -110,41 +107,38 @@ class _HomePageState extends State<HomePage> {
 
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text("Edit Expense"),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+      builder: (context) => AlertDialog(
+        title: const Text("Edit Expense"),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            //user input -> expense name
+            TextField(
+              controller: nameController,
+              textCapitalization: TextCapitalization.words,
+              decoration: const InputDecoration(labelText: "Name"),
+              textInputAction: TextInputAction.next,
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                //user input -> expense name
-                TextField(
-                  controller: nameController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(labelText: "Name"),
-                  textInputAction: TextInputAction.next,
-                ),
 
-                //user input user amount
-                TextField(
-                  controller: amountController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration: const InputDecoration(labelText: "Amount"),
-                ),
-              ],
+            //user input user amount
+            TextField(
+              controller: amountController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: const InputDecoration(labelText: "Amount"),
             ),
-            actions: [
-              // cancel button
-              _cancelButton(),
+          ],
+        ),
+        actions: [
+          // cancel button
+          _cancelButton(),
 
-              //save button
-              _editExpenseButton(expense),
-            ],
-          ),
+          //save button
+          _editExpenseButton(expense),
+        ],
+      ),
     );
   }
 
@@ -152,24 +146,21 @@ class _HomePageState extends State<HomePage> {
   void openDeleteBox(Expense expense) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text("Delete Expense?"),
-            content: Text(
-              'Delete "${expense.name}" from your expenses?',
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            actions: [
-              // cancel button
-              _cancelButton(),
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Expense?"),
+        content: Text(
+          'Delete "${expense.name}" from your expenses?',
+          style: TextStyle(color: Colors.grey.shade600),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        actions: [
+          // cancel button
+          _cancelButton(),
 
-              //delete button
-              _deleteExpenseButton(expense.id),
-            ],
-          ),
+          //delete button
+          _deleteExpenseButton(expense.id),
+        ],
+      ),
     );
   }
 
@@ -208,11 +199,10 @@ class _HomePageState extends State<HomePage> {
         int displayMonth = (startMonth + monthOffset - 1) % 12 + 1;
         int displayYear = startYear + (startMonth + monthOffset - 1) ~/ 12;
 
-        List<Expense> displayedExpenses =
-            value.allExpense.where((expense) {
-              return expense.date.year == displayYear &&
-                  expense.date.month == displayMonth;
-            }).toList();
+        List<Expense> displayedExpenses = value.allExpense.where((expense) {
+          return expense.date.year == displayYear &&
+              expense.date.month == displayMonth;
+        }).toList();
 
         // calculate total for selected month
         double selectedMonthTotal = displayedExpenses.fold(
@@ -220,8 +210,7 @@ class _HomePageState extends State<HomePage> {
           (sum, expense) => sum + expense.amount,
         );
 
-        final monthLabel =
-            '${getCurrentMonthName(displayMonth)} $displayYear';
+        final monthLabel = '${getCurrentMonthName(displayMonth)} $displayYear';
 
         // return UI
         return Scaffold(
@@ -241,9 +230,7 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.zero,
                 children: [
                   DrawerHeader(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFF2F5F9),
-                    ),
+                    decoration: const BoxDecoration(color: Color(0xFFF2F5F9)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
@@ -272,7 +259,11 @@ class _HomePageState extends State<HomePage> {
                     leading: const CircleAvatar(
                       radius: 16,
                       backgroundColor: Color(0xFF1B3A57),
-                      child: Icon(Icons.home, color: Colors.white, size: 18),
+                      child: Icon(
+                        Icons.home_max_outlined,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                     ),
                     title: const Text(
                       'Home',
@@ -377,9 +368,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(
                                   "Transactions",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                  ),
+                                  style: TextStyle(color: Colors.grey.shade700),
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
@@ -461,39 +450,32 @@ class _HomePageState extends State<HomePage> {
 
                 // expense list UI
                 Expanded(
-                  child:
-                      displayedExpenses.isEmpty
-                          ? Center(
-                            child: Text(
-                              "No expenses yet for $monthLabel.",
-                              style: TextStyle(color: Colors.grey.shade600),
-                            ),
-                          )
-                          : ListView.builder(
-                            itemCount: displayedExpenses.length,
-                            itemBuilder: (context, index) {
-                              int reversedIndex =
-                                  displayedExpenses.length - 1 - index;
-                              Expense individualExpense =
-                                  displayedExpenses[reversedIndex];
-
-                              return MyListTile(
-                                title: individualExpense.name,
-                                subtitle: formatShortDate(
-                                  individualExpense.date,
-                                ),
-                                trailing: formatAmount(
-                                  individualExpense.amount,
-                                ),
-                                onEditPressed:
-                                    (context) =>
-                                        openEditBox(individualExpense),
-                                onDeletePressed:
-                                    (context) =>
-                                        openDeleteBox(individualExpense),
-                              );
-                            },
+                  child: displayedExpenses.isEmpty
+                      ? Center(
+                          child: Text(
+                            "No expenses yet for $monthLabel.",
+                            style: TextStyle(color: Colors.grey.shade600),
                           ),
+                        )
+                      : ListView.builder(
+                          itemCount: displayedExpenses.length,
+                          itemBuilder: (context, index) {
+                            int reversedIndex =
+                                displayedExpenses.length - 1 - index;
+                            Expense individualExpense =
+                                displayedExpenses[reversedIndex];
+
+                            return MyListTile(
+                              title: individualExpense.name,
+                              subtitle: formatShortDate(individualExpense.date),
+                              trailing: formatAmount(individualExpense.amount),
+                              onEditPressed: (context) =>
+                                  openEditBox(individualExpense),
+                              onDeletePressed: (context) =>
+                                  openDeleteBox(individualExpense),
+                            );
+                          },
+                        ),
                 ),
               ],
             ),
@@ -562,14 +544,12 @@ class _HomePageState extends State<HomePage> {
 
           //create a new updated expense
           Expense updatedExpense = Expense(
-            name:
-                nameController.text.isNotEmpty
-                    ? nameController.text
-                    : expense.name,
-            amount:
-                amountController.text.isNotEmpty
-                    ? convertStringToDouble(amountController.text)
-                    : expense.amount,
+            name: nameController.text.isNotEmpty
+                ? nameController.text
+                : expense.name,
+            amount: amountController.text.isNotEmpty
+                ? convertStringToDouble(amountController.text)
+                : expense.amount,
             date: DateTime.now(),
           );
           // old expense id
