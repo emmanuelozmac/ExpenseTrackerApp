@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                       radius: 16,
                       backgroundColor: Color(0xFF1B3A57),
                       child: Icon(
-                        Icons.home_max_outlined,
+                        Icons.home_work_outlined,
                         color: Colors.white,
                         size: 18,
                       ),
